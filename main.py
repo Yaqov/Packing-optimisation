@@ -4,13 +4,25 @@ from Visualisation import Visualisation
 from sympy import symbols, Eq, solve
 from Elipse import Elipse
 
+#Function takes in an Ellipse object and returns the equation of the ellipse
+# TODO -> pretvori ovu funkciju u dio klase elipse!
+def ellipse_equation(ellipse:Elipse):
+    x, y = symbols('x y')
+    numerator1 = (((x-ellipse.get_x())*math.cos(ellipse.get_alpha_rad()) - (y-ellipse.get_y())*math.sin(ellipse.get_alpha_rad()))**2)
+    denominator1 = (ellipse.get_a()**2)
+
+    numerator2 = (((x-ellipse.get_x())*math.sin(ellipse.get_alpha_rad()) + (y-ellipse.get_y())*math.cos(ellipse.get_alpha_rad()))**2)
+    denominator2 = (ellipse.get_b()**2)
+
+    return Eq(numerator1/denominator1 + numerator2/denominator2,1)
+
 # Function takes in 2 ellipses and returns the number of common points between them 
 def count_common_points(ellipse1:Elipse, ellipse2:Elipse):
     x, y = symbols('x y')
-   
+
     # General equation for ellipses
-    eq1 = Eq(((((x-ellipse1.get_x())*math.cos(ellipse1.get_alpha()) - (y-ellipse1.get_y())*math.sin(ellipse1.get_alpha()))**2)/(ellipse1.get_a()**2)) + ((((x-ellipse1.get_x())*math.sin(ellipse1.get_alpha()) + (y-ellipse1.get_y())*math.cos(ellipse1.get_alpha()))**2)/(ellipse1.get_b()**2)) , 1)
-    eq2 = Eq(((((x-ellipse2.get_x())*math.cos(ellipse2.get_alpha()) - (y-ellipse2.get_y())*math.sin(ellipse2.get_alpha()))**2)/(ellipse2.get_a()**2)) + ((((x-ellipse2.get_x())*math.sin(ellipse2.get_alpha()) + (y-ellipse2.get_y())*math.cos(ellipse2.get_alpha()))**2)/(ellipse2.get_b()**2)) , 1)
+    eq1 = ellipse_equation(ellipse1)
+    eq2 = ellipse_equation(ellipse2)
 
     # Solve the system of equations
     solutions = solve((eq1, eq2), (x, y))
@@ -20,19 +32,17 @@ def count_common_points(ellipse1:Elipse, ellipse2:Elipse):
 
     return common_points
 
+
 def main():    
     plot = Visualisation()
     ellipse1 = Elipse(0,0,2,1,0)
-    ellipse2 = Elipse(0,0,1,1.5,45)
-    ellipse3 = Elipse(2,2,1,1.5,45)
-    common_points = count_common_points(ellipse1, ellipse2)
+    ellipse2 = Elipse(2,2,1,1.5,49)
+    common_points = count_common_points(ellipse2, ellipse1)
+    print(common_points)
 
     plot.add_elipse(ellipse1)
     plot.add_elipse(ellipse2)
-    plot.add_elipse(ellipse3)
-    plot.plot()
-
-    print(common_points) 
+    plot.plot() 
 
 if __name__ == "__main__":
     main()

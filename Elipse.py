@@ -1,4 +1,7 @@
+import math
+
 class Elipse:
+
     def __init__(self, x, y, a, b, alpha):
         self._x = x
         self._y = y
@@ -24,3 +27,5 @@ class Elipse:
         return self._b
     def get_alpha(self):
         return self._alpha 
+    def get_alpha_rad(self):
+        return self._alpha*math.pi/180 
